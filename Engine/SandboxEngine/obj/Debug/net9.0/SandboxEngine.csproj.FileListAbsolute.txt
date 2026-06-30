@@ -1,0 +1,12 @@
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\bin\Debug\net9.0\SandboxEngine.deps.json
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\bin\Debug\net9.0\SandboxEngine.dll
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\bin\Debug\net9.0\SandboxEngine.pdb
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.AssemblyInfoInputs.cache
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.AssemblyInfo.cs
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.csproj.CoreCompileInputs.cache
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.sourcelink.json
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.dll
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\refint\SandboxEngine.dll
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.pdb
+C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\ref\SandboxEngine.dll

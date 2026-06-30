@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using SandboxEngine;
 
 namespace Sandbox;
 
@@ -8,6 +11,10 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+
+    Timer timer;
+
+    bool teste;
 
     public Game1()
     {
@@ -19,6 +26,8 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        timer = new Timer(20);
+        teste = true;
 
         base.Initialize();
     }
@@ -36,6 +45,13 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
+        timer.Atualizar(gameTime.ElapsedGameTime.TotalSeconds);
+
+        if (!timer.Ativo && teste == true)
+        {
+            Console.WriteLine("terminou");
+            teste = false;
+        }
 
         base.Update(gameTime);
     }
