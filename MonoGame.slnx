@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Engine/">
+    <Project Path="Engine/SandboxEngine/SandboxEngine.csproj" />
+  </Folder>
+  <Folder Name="/Projetos/">
+    <Project Path="Projetos/MineSweeper/MineSweeper.csproj" />
+    <Project Path="Projetos/Sandbox/Sandbox.csproj" />
+  </Folder>
+</Solution>
