@@ -21,9 +21,8 @@ public class Game1 : Game
 
     KeyboardState teclado;
 
-    Timer timer;
+    Animation idle_animation;
 
-    int indice = 0;
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -34,7 +33,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        timer = new Timer(0.5);
+        idle_animation = new Animation(7, 0.5, true);
 
         base.Initialize();
     }
@@ -48,7 +47,7 @@ public class Game1 : Game
 
         sheet = new SpriteSheet(textura);
 
-        sheet.RegistrarSequencia("idle", new Point(16, 714), new Point(71, 82), 76, 6);
+        sheet.RegistrarSequencia("idle", new Point(16, 714), new Point(71, 82), 76, 7);
 
         idle = sheet.ObterSequencia("idle");
     }
@@ -62,28 +61,7 @@ public class Game1 : Game
 
         teclado = Keyboard.GetState();
 
-        timer.Atualizar(gameTime.ElapsedGameTime.TotalSeconds);
-
-        if (teclado.IsKeyDown(Keys.Right) && !timer.Ativo)
-        {
-            timer.Resetar();
-            if (indice < idle.Count-1){indice += 1;}
-        }
-
-        if (teclado.IsKeyDown(Keys.Left) && !timer.Ativo)
-        {
-            timer.Resetar();
-            if (indice >= 1){indice -= 1;}
-        }
-
-        if (teclado.IsKeyDown(Keys.Space) && !timer.Ativo)
-        {
-            timer.Resetar();
-            foreach(var Frame in idle)
-            {
-                Console.WriteLine(Frame);
-            }
-        }
+        idle_animation.Atualizar(gameTime.ElapsedGameTime.TotalSeconds);
 
         base.Update(gameTime);
     }
@@ -94,7 +72,7 @@ public class Game1 : Game
 
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
-        _spriteBatch.Draw(textura, new Vector2(300, 200), idle[indice], Color.White);
+        _spriteBatch.Draw(textura, new Vector2(300, 200), idle[idle_animation.FrameAtual], Color.White);
         _spriteBatch.End();
 
         base.Draw(gameTime);

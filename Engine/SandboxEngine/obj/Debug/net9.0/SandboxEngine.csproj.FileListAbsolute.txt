@@ -10,3 +10,4 @@ C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxE
 C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\refint\SandboxEngine.dll
 C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.pdb
 C:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\ref\SandboxEngine.dll
+c:\Users\danie\Documents\MonoGame\Engine\SandboxEngine\obj\Debug\net9.0\SandboxEngine.csproj.AssemblyReference.cache

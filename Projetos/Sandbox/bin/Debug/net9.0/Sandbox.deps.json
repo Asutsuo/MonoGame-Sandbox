@@ -115,6 +115,9 @@
         }
       },
       "SandboxEngine/1.0.0": {
+        "dependencies": {
+          "MonoGame.Framework.DesktopGL": "3.8.4.1"
+        },
         "runtime": {
           "SandboxEngine.dll": {
             "assemblyVersion": "1.0.0.0",

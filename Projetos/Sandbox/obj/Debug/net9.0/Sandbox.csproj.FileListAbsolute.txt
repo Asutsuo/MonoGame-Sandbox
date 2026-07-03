@@ -34,3 +34,5 @@ C:\Users\danie\Documents\MonoGame\Projetos\Sandbox\obj\Debug\net9.0\Sandbox.genr
 C:\Users\danie\Documents\MonoGame\Projetos\Sandbox\obj\Debug\net9.0\ref\Sandbox.dll
 C:\Users\danie\Documents\MonoGame\Projetos\Sandbox\bin\Debug\net9.0\SandboxEngine.dll
 C:\Users\danie\Documents\MonoGame\Projetos\Sandbox\bin\Debug\net9.0\SandboxEngine.pdb
+c:\Users\danie\Documents\MonoGame\Projetos\Sandbox\bin\Debug\net9.0\Content\armadura.xnb
+c:\Users\danie\Documents\MonoGame\Projetos\Sandbox\bin\Debug\net9.0\Content\void_monster.xnb
