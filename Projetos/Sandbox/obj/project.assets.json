@@ -319,11 +319,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\danie\\Documents\\MonoGame\\Projetos\\Sandbox\\Sandbox.csproj",
+      "projectUniqueName": "C:\\Users\\danie\\Documents\\MonoGame\\Projetos\\Sandbox\\Sandbox.csproj",
       "projectName": "Sandbox",
-      "projectPath": "c:\\Users\\danie\\Documents\\MonoGame\\Projetos\\Sandbox\\Sandbox.csproj",
+      "projectPath": "C:\\Users\\danie\\Documents\\MonoGame\\Projetos\\Sandbox\\Sandbox.csproj",
       "packagesPath": "C:\\Users\\danie\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\danie\\Documents\\MonoGame\\Projetos\\Sandbox\\obj\\",
+      "outputPath": "C:\\Users\\danie\\Documents\\MonoGame\\Projetos\\Sandbox\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\danie\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -339,8 +339,8 @@
           "framework": "net9.0",
           "targetAlias": "net9.0",
           "projectReferences": {
-            "c:\\Users\\danie\\Documents\\MonoGame\\Engine\\SandboxEngine\\SandboxEngine.csproj": {
-              "projectPath": "c:\\Users\\danie\\Documents\\MonoGame\\Engine\\SandboxEngine\\SandboxEngine.csproj"
+            "C:\\Users\\danie\\Documents\\MonoGame\\Engine\\SandboxEngine\\SandboxEngine.csproj": {
+              "projectPath": "C:\\Users\\danie\\Documents\\MonoGame\\Engine\\SandboxEngine\\SandboxEngine.csproj"
             }
           }
         }
