@@ -10,16 +10,25 @@ namespace MineSweeper;
 
 public class Cell
 {
-    public bool blank;
-    public bool mine;
-    public bool marked;
+    public bool blank = false;
+    public bool mine = false;
+    public bool marked = false;
+    public bool aberta = false;
 
     private Texture2D textura;
     private Rectangle position;
     private int linha;
     private int coluna;
-    private int cellX;
     private SpriteBatch spriteBatch;
+    private Rectangle area;
+
+    public enum CellSprite
+    {
+        Closed,
+        Bomb,
+        Empty,
+        Flag
+    }
 
     public Cell(Texture2D textura, Rectangle position, int linha, int coluna, SpriteBatch spriteBatch)
     {
@@ -28,19 +37,78 @@ public class Cell
         this.linha = linha;
         this.coluna = coluna;
         this.spriteBatch = spriteBatch;
+
+        area = new Rectangle(new Point(30 + coluna * 32, 156 + linha * 32), new Point(32, 32));
     }
 
-    public void Update(int indice)
+    public bool MouseSobre(Point mouse)
     {
-        if (indice >= 0 && indice <= 3)
+        return area.Contains(mouse);
+    }
+
+    public void Update()
+    {
+        /*switch (estado)
         {
-            cellX = indice;
-            position = new Rectangle(new Point(0 + cellX * 16, 367), new Point(16, 16));
+            case  CellSprite.Closed:
+                position = new Rectangle(new Point(0 + 0 * 16, 367), new Point(16, 16));
+                break;
+            case CellSprite.Bomb:
+                position = new Rectangle(new Point(0 + 1 * 16, 367), new Point(16, 16));
+                break;
+            case CellSprite.Empty:
+                position = new Rectangle(new Point(0 + 2 * 16, 367), new Point(16, 16));
+                break;
+            case CellSprite.Flag:
+                position = new Rectangle(new Point(0 + 3 * 16, 367), new Point(16, 16));
+                break;
+            default:
+                Console.WriteLine("Sprite desconhecido");
+                break;
+        }*/
+
+        if (mine)
+        {
+            blank = false;
+        }
+
+        if (!mine)
+        {
+            blank = true;
+        }
+
+        if (marked && !aberta)
+        {
+            position = new Rectangle(new Point(0 + 3 * 16, 367), new Point(16, 16));
+        }
+
+        if (mine && aberta)
+        {
+            position = new Rectangle(new Point(0 + 1 * 16, 367), new Point(16, 16));
+        }
+
+        if (blank && aberta)
+        {
+            position = new Rectangle(new Point(0 + 2 * 16, 367), new Point(16, 16));
         }
     }
 
     public void Draw()
     {
-        spriteBatch.Draw(textura, new Rectangle(new Point(30 + coluna * 32, 156 + linha * 32), new Point(32, 32)), position, Color.White);
+        spriteBatch.Draw(textura, area, position, Color.White);
+    }
+
+    public bool foiClicado(MouseState atual, MouseState anterior, Point mouse)
+    {
+        if (atual.LeftButton == ButtonState.Pressed && anterior.LeftButton == ButtonState.Released && MouseSobre(mouse))
+        {
+            Console.WriteLine("clicado");
+            Console.WriteLine($"celula [{linha}, {coluna}]");
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

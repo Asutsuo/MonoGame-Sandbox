@@ -23,9 +23,16 @@ public class Game1 : Game
     Rectangle pos_celula;
 
     DebugOverlay debug;
+    Random random = new Random();
+    MouseState mouse;
+
+    //Ideia da Chat GPT
+    MouseState mouseAtual;
+    MouseState mouseAnterior;
 
     int larguraTela;
     int alturaTela;
+    int quantidadeBombas;
 
     Cell[,] tabuleiro = new Cell[16, 16];
 
@@ -56,6 +63,8 @@ public class Game1 : Game
         spr_celula = new Rectangle(new Point(0, 367), new Point(16, 16));
         pos_celula = new Rectangle(new Point(32, 156), new Point(32, 32));
 
+        quantidadeBombas = 40;
+
         base.Initialize();
     }
 
@@ -80,6 +89,14 @@ public class Game1 : Game
             }
         }
 
+        for (int i = 0; i < quantidadeBombas; i++)
+        {
+            int linha = random.Next(16);
+            int coluna = random.Next(16);
+
+            tabuleiro[linha, coluna].mine = true;
+        }
+
     }
 
     protected override void Update(GameTime gameTime)
@@ -90,9 +107,25 @@ public class Game1 : Game
         // TODO: Add your update logic here
         debug.MousePosition = Mouse.GetState().Position;
 
-        //Update de estados das células
-        tabuleiro[8, 8].Update(3);
+        mouse = Mouse.GetState();
 
+        mouseAnterior = mouseAtual;
+        mouseAtual = Mouse.GetState();
+
+        //Update de estados das células
+
+        for (int linha = 0; linha < 16; linha++)
+        {
+            for (int coluna = 0; coluna < 16; coluna++)
+            {
+                if (tabuleiro[linha, coluna].foiClicado(mouseAtual, mouseAnterior, mouse.Position))
+                {
+                    tabuleiro[linha, coluna].aberta = true;
+                }
+
+                tabuleiro[linha, coluna].Update();
+            }
+        }
         base.Update(gameTime);
     }
 
