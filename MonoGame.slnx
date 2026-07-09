@@ -2,6 +2,11 @@
   <Folder Name="/Engine/">
     <Project Path="Engine/SandboxEngine/SandboxEngine.csproj" />
   </Folder>
+  <Folder Name="/Estudos/" />
+  <Folder Name="/Estudos/testes/">
+    <Project Path="Estudos/testes/teste_matrizes/teste_matrizes.csproj" />
+    <Project Path="Estudos/testes/teste_mouse/teste_mouse.csproj" />
+  </Folder>
   <Folder Name="/Projetos/">
     <Project Path="Projetos/MineSweeper/MineSweeper.csproj" />
     <Project Path="Projetos/Sandbox/Sandbox.csproj" />

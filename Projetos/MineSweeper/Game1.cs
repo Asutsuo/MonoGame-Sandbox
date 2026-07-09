@@ -1,6 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using SandboxEngine;
 
 namespace MineSweeper;
 
@@ -9,12 +13,21 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    Texture2D textura;
-    Rectangle retangulo;
-    Rectangle retanguloPosicao;
+    Texture2D tex_minesweeper;
+    SpriteFont fonte;
+
+    Rectangle spr_tela;
+    Rectangle pos_tela;
+
+    Rectangle spr_celula;
+    Rectangle pos_celula;
+
+    DebugOverlay debug;
 
     int larguraTela;
     int alturaTela;
+
+    Cell[,] tabuleiro = new Cell[16, 16];
 
     public Game1()
     {
@@ -32,11 +45,16 @@ public class Game1 : Game
     {
         // TODO: Add your initialization logic here
 
+        //Inicialização de variáveis
+
         larguraTela = GraphicsDevice.Viewport.Width;
         alturaTela = GraphicsDevice.Viewport.Height;
 
-        retangulo = new Rectangle(new Point(0, 0), new Point(287, 351));
-        retanguloPosicao = new Rectangle(new Point(0, 0), new Point(larguraTela, alturaTela));
+        spr_tela = new Rectangle(new Point(0, 0), new Point(287, 351));
+        pos_tela = new Rectangle(new Point(0, 0), new Point(larguraTela, alturaTela));
+
+        spr_celula = new Rectangle(new Point(0, 367), new Point(16, 16));
+        pos_celula = new Rectangle(new Point(32, 156), new Point(32, 32));
 
         base.Initialize();
     }
@@ -46,7 +64,22 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
-        textura = Content.Load<Texture2D>("minesweeper");
+        tex_minesweeper = Content.Load<Texture2D>("minesweeper");
+        fonte = Content.Load<SpriteFont>("Fonte");
+        debug = new DebugOverlay(Content.Load<SpriteFont>("Fonte"));
+        debug.Mouse = true;
+
+        //Lógica de Inicialização de células
+
+        for (int linha = 0; linha < 16; linha++)
+        {
+            for (int coluna = 0; coluna < 16; coluna++)
+            {
+
+                tabuleiro[linha, coluna] = new Cell(tex_minesweeper, spr_celula, linha, coluna, _spriteBatch);
+            }
+        }
+
     }
 
     protected override void Update(GameTime gameTime)
@@ -55,6 +88,10 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
+        debug.MousePosition = Mouse.GetState().Position;
+
+        //Update de estados das células
+        tabuleiro[8, 8].Update(3);
 
         base.Update(gameTime);
     }
@@ -65,7 +102,22 @@ public class Game1 : Game
 
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
-        _spriteBatch.Draw(textura, retanguloPosicao, retangulo, Color.White);
+
+        //desenhando a tela
+        _spriteBatch.Draw(tex_minesweeper, pos_tela, spr_tela, Color.White);
+
+        //desenhando células
+        for (int linha = 0; linha < 16; linha++)
+        {
+            for (int coluna = 0; coluna < 16; coluna++)
+            {
+                tabuleiro[linha, coluna].Draw();
+            }
+        }
+
+
+        //DEBUG
+        debug.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);
