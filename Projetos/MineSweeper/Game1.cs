@@ -125,7 +125,6 @@ public class Game1 : Game
                     {
                         tabuleiro[linha, coluna].mine = false;
                         tabuleiro[linha, coluna].blank = true;
-                        tabuleiro[linha, coluna].aberta = true;
 
                         for (int LINHA = 0; LINHA < 16; LINHA++)
                         {
@@ -136,15 +135,19 @@ public class Game1 : Game
                         }
 
                         partidaIniciada = true;
+
+                        tabuleiro[linha, coluna].expandir(tabuleiro);
                     }
 
                     if (partidaIniciada)
                     {
                         tabuleiro[linha, coluna].aberta = true;
+                        tabuleiro[linha, coluna].expandir(tabuleiro);
                     }
                 }
 
                 tabuleiro[linha, coluna].Update();
+                tabuleiro[linha, coluna].tabuleiro = tabuleiro;
             }
         }
 

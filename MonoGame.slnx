@@ -4,6 +4,7 @@
   </Folder>
   <Folder Name="/Estudos/" />
   <Folder Name="/Estudos/testes/">
+    <Project Path="Estudos/testes/teste_flood_fill/teste_flood_fill.csproj" />
     <Project Path="Estudos/testes/teste_matrizes/teste_matrizes.csproj" />
     <Project Path="Estudos/testes/teste_mouse/teste_mouse.csproj" />
   </Folder>

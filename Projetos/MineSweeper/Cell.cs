@@ -17,6 +17,7 @@ public class Cell
     public bool marked = false;
     public bool aberta = false;
     public int vizinhos = 0;
+    public Cell[,] tabuleiro;
 
     private Texture2D textura;
     private Rectangle position;
@@ -43,6 +44,32 @@ public class Cell
         this.spriteBatch = spriteBatch;
 
         area = new Rectangle(new Point(30 + coluna * 32, 156 + linha * 32), new Point(32, 32));
+    }
+
+    public void expandir(Cell[,] tabuleiro)
+    {
+
+        for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++)
+        {
+            for (int deltaColuna = -1; deltaColuna <= 1; deltaColuna++)
+            {
+                if (deltaLinha == 0 && deltaColuna == 0)
+                {
+                    continue;
+                }
+
+                int novaLinha = linha + deltaLinha;
+                int novaColuna = coluna + deltaColuna;
+
+                bool noLimite = novaLinha >= 0 && novaLinha < tabuleiro.GetLength(0) && novaColuna >= 0 && novaColuna < tabuleiro.GetLength(1);
+
+                if (noLimite && vizinhos == 0)
+                {
+                    tabuleiro[novaLinha, novaColuna].aberta = true;
+                }
+
+            }
+        }
     }
 
     public bool MouseSobre(Point mouse)
@@ -77,9 +104,11 @@ public class Cell
             position = new Rectangle(new Point(0 + 1 * 16, 367), new Point(16, 16));
         }
 
-        if (blank && aberta)
+        if (!mine && aberta)
         {
             position = new Rectangle(new Point(0 + 2 * 16, 367), new Point(16, 16));
+
+            expandir(tabuleiro);
         }
 
         //Desenhando vizinhos
@@ -149,8 +178,7 @@ public class Cell
 
         if (atual.LeftButton == ButtonState.Pressed && anterior.LeftButton == ButtonState.Released && MouseSobre(mouse) && !marked)
         {
-            Console.WriteLine("Clique esquerdo");
-            Console.WriteLine($"celula [{linha}, {coluna}]");
+            //Console.WriteLine($"Clicado em X: {linha}, Y: {coluna}");
             return true;
         }
         else
@@ -161,7 +189,7 @@ public class Cell
 
     public void checarVizinhos(int LINHA, int COLUNA, Cell[,] tabuleiro)
     {
-        //Teste de verificação de vizinhos adjacentes
+        //Verificação de vizinhos adjacentes
 
         for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++)
         {
