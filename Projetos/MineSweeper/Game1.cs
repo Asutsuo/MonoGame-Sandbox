@@ -33,6 +33,7 @@ public class Game1 : Game
     int larguraTela;
     int alturaTela;
     int quantidadeBombas;
+    bool partidaIniciada;
 
     Cell[,] tabuleiro = new Cell[16, 16];
 
@@ -64,6 +65,7 @@ public class Game1 : Game
         pos_celula = new Rectangle(new Point(32, 156), new Point(32, 32));
 
         quantidadeBombas = 40;
+        partidaIniciada = false;
 
         base.Initialize();
     }
@@ -96,7 +98,6 @@ public class Game1 : Game
 
             tabuleiro[linha, coluna].mine = true;
         }
-
     }
 
     protected override void Update(GameTime gameTime)
@@ -120,12 +121,35 @@ public class Game1 : Game
             {
                 if (tabuleiro[linha, coluna].foiClicado(mouseAtual, mouseAnterior, mouse.Position))
                 {
-                    tabuleiro[linha, coluna].aberta = true;
+                    if (!partidaIniciada)
+                    {
+                        tabuleiro[linha, coluna].mine = false;
+                        tabuleiro[linha, coluna].blank = true;
+                        tabuleiro[linha, coluna].aberta = true;
+
+                        for (int LINHA = 0; LINHA < 16; LINHA++)
+                        {
+                            for (int COLUNA = 0; COLUNA < 16; COLUNA++)
+                            {
+                                tabuleiro[LINHA, COLUNA].checarVizinhos(LINHA, COLUNA, tabuleiro);
+                            }
+                        }
+
+                        partidaIniciada = true;
+                    }
+
+                    if (partidaIniciada)
+                    {
+                        tabuleiro[linha, coluna].aberta = true;
+                    }
                 }
 
                 tabuleiro[linha, coluna].Update();
             }
         }
+
+
+
         base.Update(gameTime);
     }
 
