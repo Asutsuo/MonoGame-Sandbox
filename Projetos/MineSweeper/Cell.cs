@@ -6,8 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using SandboxEngine;
-
 namespace MineSweeper;
 
 public class Cell
@@ -17,7 +15,10 @@ public class Cell
     public bool marked = false;
     public bool aberta = false;
     public bool gameOver = false;
+    public bool comBandeira = false;
+    public bool checada = false;
     public int vizinhos = 0;
+    public int contadorBandeiras;
     public Cell[,] tabuleiro;
 
     private Texture2D textura;
@@ -27,14 +28,6 @@ public class Cell
     private int coluna;
     private SpriteBatch spriteBatch;
     private Rectangle area;
-
-    public enum CellSprite
-    {
-        Closed,
-        Bomb,
-        Empty,
-        Flag
-    }
 
     public Cell(Texture2D textura, Rectangle position, int linha, int coluna, SpriteBatch spriteBatch)
     {
@@ -124,14 +117,23 @@ public class Cell
             blank = true;
         }
 
-        if (marked && !aberta)
+        if (aberta)
+        {
+            comBandeira = false;
+        }
+
+        if (marked && !aberta && contadorBandeiras < 10)
         {
             position = new Rectangle(new Point(0 + 3 * 16, 367), new Point(16, 16));
+
+            comBandeira = true;
         }
 
         if (!marked && !aberta)
         {
             position = new Rectangle(new Point(0, 367), new Point(16, 16));
+
+            comBandeira = false;
         }
 
         if (mine && aberta)
@@ -193,9 +195,10 @@ public class Cell
 
     public bool foiClicado(MouseState atual, MouseState anterior, Point mouse)
     {
+        //checando clique direito
         if (atual.RightButton == ButtonState.Pressed && anterior.RightButton == ButtonState.Released && MouseSobre(mouse))
         {
-            if (!aberta && !marked)
+            if (!aberta && !marked && contadorBandeiras < 10)
             {
                 marked = true;
                 return false;
@@ -213,9 +216,10 @@ public class Cell
             }
         }
 
+        //checando clique esquerdo
         if (atual.LeftButton == ButtonState.Released && anterior.LeftButton == ButtonState.Pressed && MouseSobre(mouse) && !marked)
         {
-            Console.WriteLine($"Clicado em X: {linha}, Y: {coluna}");
+            //Console.WriteLine($"Clicado em X: {linha}, Y: {coluna}");
             return true;
         }
         else

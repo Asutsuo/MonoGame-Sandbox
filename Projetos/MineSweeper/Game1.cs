@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,20 +21,28 @@ public class Game1 : Game
     Rectangle pos_tela;
 
     Rectangle spr_celula;
-    Rectangle pos_celula;
 
     DebugOverlay debug;
     Random random = new Random();
     MouseState mouse;
 
+    SpriteSheet relogio;
+
     //Ideia da Chat GPT
     MouseState mouseAtual;
     MouseState mouseAnterior;
+
+    //Instanciando relógio digital
+    Clock clock;
+
+    //Instanciando contador de minas
+    MineCounter mineCounter;
 
     int larguraTela;
     int alturaTela;
     int quantidadeBombas;
     int bombasColocadas;
+    int contadorBandeiras;
     bool partidaIniciada;
     bool gameOver;
 
@@ -64,8 +73,8 @@ public class Game1 : Game
         pos_tela = new Rectangle(new Point(0, 0), new Point(larguraTela, alturaTela));
 
         spr_celula = new Rectangle(new Point(0, 367), new Point(16, 16));
-        pos_celula = new Rectangle(new Point(32, 156), new Point(32, 32));
 
+        contadorBandeiras = 0;
         quantidadeBombas = 40;
         bombasColocadas = 0;
         partidaIniciada = false;
@@ -82,6 +91,12 @@ public class Game1 : Game
         tex_minesweeper = Content.Load<Texture2D>("minesweeper");
         fonte = Content.Load<SpriteFont>("Fonte");
         debug = new DebugOverlay(Content.Load<SpriteFont>("Fonte"));
+        relogio = new SpriteSheet(tex_minesweeper);
+        relogio.RegistrarSequencia("clock", new Point(0, 383), new Point(11, 21), 11, 10);
+
+        clock = new Clock(tex_minesweeper, _spriteBatch);
+        mineCounter = new MineCounter(tex_minesweeper, _spriteBatch);
+
         debug.Mouse = true;
 
         //Lógica de Inicialização de células
@@ -117,9 +132,19 @@ public class Game1 : Game
         debug.MousePosition = Mouse.GetState().Position;
 
         mouse = Mouse.GetState();
-
         mouseAnterior = mouseAtual;
         mouseAtual = Mouse.GetState();
+        mineCounter.contadorBandeiras = contadorBandeiras;
+
+        clock.deltaTime = gameTime.ElapsedGameTime.TotalSeconds;
+
+        //Atualizando relógio digital e contador de minas
+        if (!gameOver)
+        {
+            clock.Update();
+
+            mineCounter.Update();
+        }
 
         //Update de estados das células
 
@@ -127,6 +152,22 @@ public class Game1 : Game
         {
             for (int coluna = 0; coluna < 16; coluna++)
             {
+                tabuleiro[linha, coluna].contadorBandeiras = contadorBandeiras;
+
+                if (tabuleiro[linha, coluna].comBandeira && !tabuleiro[linha, coluna].checada && contadorBandeiras < 10)
+                {
+                    tabuleiro[linha, coluna].checada = true;
+                    contadorBandeiras++;
+                    mineCounter.Subtrai();
+                }
+
+                if (!tabuleiro[linha, coluna].comBandeira && tabuleiro[linha, coluna].checada && contadorBandeiras >= 0)
+                {
+                    tabuleiro[linha, coluna].checada = false;
+                    contadorBandeiras--;
+                    mineCounter.Adiciona();
+                }
+
                 if (tabuleiro[linha, coluna].foiClicado(mouseAtual, mouseAnterior, mouse.Position) && !gameOver)
                 {
                     if (!partidaIniciada)
@@ -170,8 +211,6 @@ public class Game1 : Game
             }
         }
 
-
-
         base.Update(gameTime);
     }
 
@@ -194,6 +233,11 @@ public class Game1 : Game
             }
         }
 
+        //desenhando relógio digital
+        clock.Draw();
+
+        //desenhando contador de minas
+        mineCounter.Draw();
 
         //DEBUG
         debug.Draw(_spriteBatch);

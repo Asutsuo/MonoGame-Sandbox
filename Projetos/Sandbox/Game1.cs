@@ -63,6 +63,8 @@ public class Game1 : Game
 
         idle_animation.Atualizar(gameTime.ElapsedGameTime.TotalSeconds);
 
+        Console.WriteLine(idle[idle_animation.FrameAtual]);
+
         base.Update(gameTime);
     }
 
