@@ -72,6 +72,35 @@ public class Cell
         }
     }
 
+    public void chord(Cell[,] tabuleiro)
+    {
+
+        for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++)
+        {
+            for (int deltaColuna = -1; deltaColuna <= 1; deltaColuna++)
+            {
+                if (deltaLinha == 0 && deltaColuna == 0)
+                {
+                    continue;
+                }
+
+                int novaLinha = linha + deltaLinha;
+                int novaColuna = coluna + deltaColuna;
+
+                bool noLimite = novaLinha >= 0 && novaLinha < tabuleiro.GetLength(0) && novaColuna >= 0 && novaColuna < tabuleiro.GetLength(1);
+
+                if (noLimite && aberta)
+                {
+                    if (!tabuleiro[novaLinha, novaColuna].marked && !tabuleiro[novaLinha, novaColuna].mine)
+                    {
+                        tabuleiro[novaLinha, novaColuna].aberta = true;
+                    }
+                }
+
+            }
+        }
+    }
+
     public bool MouseSobre(Point mouse)
     {
         return area.Contains(mouse);

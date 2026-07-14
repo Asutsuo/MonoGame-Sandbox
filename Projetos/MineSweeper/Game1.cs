@@ -143,6 +143,7 @@ public class Game1 : Game
                     {
                         tabuleiro[linha, coluna].aberta = true;
                         tabuleiro[linha, coluna].expandir(tabuleiro);
+                        tabuleiro[linha, coluna].chord(tabuleiro);
                     }
                 }
 
