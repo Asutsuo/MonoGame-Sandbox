@@ -33,7 +33,9 @@ public class Game1 : Game
     int larguraTela;
     int alturaTela;
     int quantidadeBombas;
+    int bombasColocadas;
     bool partidaIniciada;
+    bool gameOver;
 
     Cell[,] tabuleiro = new Cell[16, 16];
 
@@ -65,7 +67,9 @@ public class Game1 : Game
         pos_celula = new Rectangle(new Point(32, 156), new Point(32, 32));
 
         quantidadeBombas = 40;
+        bombasColocadas = 0;
         partidaIniciada = false;
+        gameOver = false;
 
         base.Initialize();
     }
@@ -91,12 +95,16 @@ public class Game1 : Game
             }
         }
 
-        for (int i = 0; i < quantidadeBombas; i++)
+        while (bombasColocadas < quantidadeBombas)
         {
             int linha = random.Next(16);
             int coluna = random.Next(16);
 
-            tabuleiro[linha, coluna].mine = true;
+            if (!tabuleiro[linha, coluna].mine)
+            {
+                tabuleiro[linha, coluna].mine = true;
+                bombasColocadas++;
+            }
         }
     }
 
@@ -119,7 +127,7 @@ public class Game1 : Game
         {
             for (int coluna = 0; coluna < 16; coluna++)
             {
-                if (tabuleiro[linha, coluna].foiClicado(mouseAtual, mouseAnterior, mouse.Position))
+                if (tabuleiro[linha, coluna].foiClicado(mouseAtual, mouseAnterior, mouse.Position) && !gameOver)
                 {
                     if (!partidaIniciada)
                     {
@@ -134,20 +142,30 @@ public class Game1 : Game
                             }
                         }
 
-                        partidaIniciada = true;
-
                         tabuleiro[linha, coluna].expandir(tabuleiro);
+                        tabuleiro[linha, coluna].aberta = true;
+                        tabuleiro[linha, coluna].chord(tabuleiro, partidaIniciada);
+
+                        partidaIniciada = true;
                     }
 
-                    if (partidaIniciada)
+                    else
                     {
-                        tabuleiro[linha, coluna].aberta = true;
                         tabuleiro[linha, coluna].expandir(tabuleiro);
-                        tabuleiro[linha, coluna].chord(tabuleiro);
+                        tabuleiro[linha, coluna].aberta = true;
+                        tabuleiro[linha, coluna].chord(tabuleiro, partidaIniciada);
                     }
                 }
 
-                tabuleiro[linha, coluna].Update();
+                if (!gameOver)
+                {
+                    tabuleiro[linha, coluna].Update(gameOver);
+                    if (tabuleiro[linha, coluna].gameOver)
+                    {
+                        gameOver = true;
+                    }
+                }
+
                 tabuleiro[linha, coluna].tabuleiro = tabuleiro;
             }
         }

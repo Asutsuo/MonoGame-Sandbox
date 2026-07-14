@@ -16,6 +16,7 @@ public class Cell
     public bool mine = false;
     public bool marked = false;
     public bool aberta = false;
+    public bool gameOver = false;
     public int vizinhos = 0;
     public Cell[,] tabuleiro;
 
@@ -72,7 +73,7 @@ public class Cell
         }
     }
 
-    public void chord(Cell[,] tabuleiro)
+    public void chord(Cell[,] tabuleiro, bool partidaIniciada)
     {
 
         for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++)
@@ -89,9 +90,14 @@ public class Cell
 
                 bool noLimite = novaLinha >= 0 && novaLinha < tabuleiro.GetLength(0) && novaColuna >= 0 && novaColuna < tabuleiro.GetLength(1);
 
-                if (noLimite && aberta)
+                if (noLimite && aberta && !mine && !tabuleiro[novaLinha, novaColuna].marked)
                 {
-                    if (!tabuleiro[novaLinha, novaColuna].marked && !tabuleiro[novaLinha, novaColuna].mine)
+                    if (!partidaIniciada && !tabuleiro[novaLinha, novaColuna].mine)
+                    {
+                        tabuleiro[novaLinha, novaColuna].aberta = true;
+                    }
+
+                    if (partidaIniciada)
                     {
                         tabuleiro[novaLinha, novaColuna].aberta = true;
                     }
@@ -106,7 +112,7 @@ public class Cell
         return area.Contains(mouse);
     }
 
-    public void Update()
+    public void Update(bool gameOver)
     {
         if (mine)
         {
@@ -131,6 +137,8 @@ public class Cell
         if (mine && aberta)
         {
             position = new Rectangle(new Point(0 + 1 * 16, 367), new Point(16, 16));
+            gameOver = true;
+            this.gameOver = gameOver;
         }
 
         if (!mine && aberta)
@@ -205,9 +213,9 @@ public class Cell
             }
         }
 
-        if (atual.LeftButton == ButtonState.Pressed && anterior.LeftButton == ButtonState.Released && MouseSobre(mouse) && !marked)
+        if (atual.LeftButton == ButtonState.Released && anterior.LeftButton == ButtonState.Pressed && MouseSobre(mouse) && !marked)
         {
-            //Console.WriteLine($"Clicado em X: {linha}, Y: {coluna}");
+            Console.WriteLine($"Clicado em X: {linha}, Y: {coluna}");
             return true;
         }
         else
