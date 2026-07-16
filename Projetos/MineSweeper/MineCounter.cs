@@ -17,10 +17,10 @@ public class MineCounter
     private Texture2D textura;
     private SpriteBatch spriteBatch;
 
-    public int unidade = 10;
-    private int dezena;
+    public int unidade;
+    private int dezena = 4;
 
-    public int bandeiras = 10;
+    public int bandeiras = 40;
     public double deltaTime;
     public int contadorBandeiras;
 
@@ -32,24 +32,34 @@ public class MineCounter
 
     public void Subtrai()
     {
-        if (unidade > 0)
+        if (dezena > 0 && unidade == 0)
         {
-            dezena = 0;
+            dezena--;
+            unidade += 9;
+        }
+
+        else if (dezena > 0 && unidade > 0)
+        {
             unidade--;
         }
 
-        if (dezena > 0)
+        else if (dezena == 0 && unidade > 0)
         {
-            dezena--;
-            unidade = 9;
+            unidade--;
         }
     }
 
     public void Adiciona()
     {
-        if (dezena < 1)
+        if (dezena < 4 && unidade < 9)
         {
             unidade++;
+        }
+
+        else if (dezena < 4 && unidade == 9)
+        {
+            unidade = 0;
+            dezena++;
         }
     }
 

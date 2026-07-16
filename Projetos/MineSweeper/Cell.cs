@@ -122,7 +122,7 @@ public class Cell
             comBandeira = false;
         }
 
-        if (marked && !aberta && contadorBandeiras < 10)
+        if (marked && !aberta && contadorBandeiras < 40)
         {
             position = new Rectangle(new Point(0 + 3 * 16, 367), new Point(16, 16));
 
@@ -198,7 +198,7 @@ public class Cell
         //checando clique direito
         if (atual.RightButton == ButtonState.Pressed && anterior.RightButton == ButtonState.Released && MouseSobre(mouse))
         {
-            if (!aberta && !marked && contadorBandeiras < 10)
+            if (!aberta && !marked && contadorBandeiras < 40)
             {
                 marked = true;
                 return false;

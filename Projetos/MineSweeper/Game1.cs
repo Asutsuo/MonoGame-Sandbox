@@ -38,6 +38,9 @@ public class Game1 : Game
     //Instanciando contador de minas
     MineCounter mineCounter;
 
+    //Instanciando botão de reset
+    NewGame newGame;
+
     int larguraTela;
     int alturaTela;
     int quantidadeBombas;
@@ -60,6 +63,51 @@ public class Game1 : Game
         IsMouseVisible = true;
     }
 
+    private void NovoJogo()
+    {
+        contadorBandeiras = 0;
+        bombasColocadas = 0;
+        partidaIniciada = false;
+        gameOver = false;
+
+        clock = new Clock(tex_minesweeper, _spriteBatch);
+        mineCounter = new MineCounter(tex_minesweeper, _spriteBatch);
+        newGame = new NewGame(tex_minesweeper, _spriteBatch);
+
+        tabuleiro = new Cell[16, 16];
+
+        // Criando células
+        for (int linha = 0; linha < 16; linha++)
+        {
+            for (int coluna = 0; coluna < 16; coluna++)
+            {
+                tabuleiro[linha, coluna] =
+                    new Cell(tex_minesweeper, spr_celula, linha, coluna, _spriteBatch);
+            }
+        }
+
+        // Gerando bombas
+        while (bombasColocadas < quantidadeBombas)
+        {
+            int linha = random.Next(16);
+            int coluna = random.Next(16);
+
+            if (!tabuleiro[linha, coluna].mine)
+            {
+                tabuleiro[linha, coluna].mine = true;
+                bombasColocadas++;
+            }
+        }
+
+        for (int linha = 0; linha < 16; linha++)
+        {
+            for (int coluna = 0; coluna < 16; coluna++)
+            {
+                tabuleiro[linha, coluna].tabuleiro = tabuleiro;
+            }
+        }
+    }
+
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
@@ -76,9 +124,6 @@ public class Game1 : Game
 
         contadorBandeiras = 0;
         quantidadeBombas = 40;
-        bombasColocadas = 0;
-        partidaIniciada = false;
-        gameOver = false;
 
         base.Initialize();
     }
@@ -96,31 +141,12 @@ public class Game1 : Game
 
         clock = new Clock(tex_minesweeper, _spriteBatch);
         mineCounter = new MineCounter(tex_minesweeper, _spriteBatch);
+        newGame = new NewGame(tex_minesweeper, _spriteBatch);
 
-        debug.Mouse = true;
+        //debug.Mouse = true;
 
-        //Lógica de Inicialização de células
-
-        for (int linha = 0; linha < 16; linha++)
-        {
-            for (int coluna = 0; coluna < 16; coluna++)
-            {
-
-                tabuleiro[linha, coluna] = new Cell(tex_minesweeper, spr_celula, linha, coluna, _spriteBatch);
-            }
-        }
-
-        while (bombasColocadas < quantidadeBombas)
-        {
-            int linha = random.Next(16);
-            int coluna = random.Next(16);
-
-            if (!tabuleiro[linha, coluna].mine)
-            {
-                tabuleiro[linha, coluna].mine = true;
-                bombasColocadas++;
-            }
-        }
+        //Lógica de inicialização de células
+        NovoJogo();
     }
 
     protected override void Update(GameTime gameTime)
@@ -146,6 +172,14 @@ public class Game1 : Game
             mineCounter.Update();
         }
 
+        //Adicionando funcionalidades do botão reset
+        if (newGame.foiClicado(mouseAnterior, mouseAtual, mouse.Position))
+        {
+            NovoJogo();
+        }
+
+
+
         //Update de estados das células
 
         for (int linha = 0; linha < 16; linha++)
@@ -154,7 +188,7 @@ public class Game1 : Game
             {
                 tabuleiro[linha, coluna].contadorBandeiras = contadorBandeiras;
 
-                if (tabuleiro[linha, coluna].comBandeira && !tabuleiro[linha, coluna].checada && contadorBandeiras < 10)
+                if (tabuleiro[linha, coluna].comBandeira && !tabuleiro[linha, coluna].checada && contadorBandeiras < 40)
                 {
                     tabuleiro[linha, coluna].checada = true;
                     contadorBandeiras++;
@@ -204,6 +238,7 @@ public class Game1 : Game
                     if (tabuleiro[linha, coluna].gameOver)
                     {
                         gameOver = true;
+                        newGame.position = new Rectangle(78, 404, 26, 26);
                     }
                 }
 
@@ -238,6 +273,9 @@ public class Game1 : Game
 
         //desenhando contador de minas
         mineCounter.Draw();
+
+        //desenhando botão reset
+        newGame.Draw();
 
         //DEBUG
         debug.Draw(_spriteBatch);
