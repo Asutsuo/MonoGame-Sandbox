@@ -9,6 +9,7 @@
     <Project Path="Estudos/testes/teste_mouse/teste_mouse.csproj" />
   </Folder>
   <Folder Name="/Projetos/">
+    <Project Path="Projetos/Conway Game of Life/Conway Game of Life.csproj" />
     <Project Path="Projetos/MineSweeper/MineSweeper.csproj" />
     <Project Path="Projetos/Sandbox/Sandbox.csproj" />
   </Folder>
