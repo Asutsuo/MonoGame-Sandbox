@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using SandboxEngine;
+using System.Runtime.InteropServices;
 
 namespace Conway_Game_of_Life
 {
@@ -18,9 +19,11 @@ namespace Conway_Game_of_Life
         MouseState mouseAnterior;
         KeyboardState tecladoAtual;
         KeyboardState tecladoAnterior;
+        SpriteFont fonte;
+        DebugOverlay debug;
 
-        int larguraTela;
-        int alturaTela;
+        int generation;
+        int indiceHistorico;
 
         public Game1()
         {
@@ -39,17 +42,12 @@ namespace Conway_Game_of_Life
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.ApplyChanges();
 
-            // Definindo largura e altura da tela
-            larguraTela = GraphicsDevice.Viewport.Width;
-            alturaTela = GraphicsDevice.Viewport.Height;
-
             //Testando o ToggleCell
             tabuleiro.ToggleCell(20, 20);
             tabuleiro.ToggleCell(21, 20);
             tabuleiro.ToggleCell(22, 20);
             tabuleiro.ToggleCell(20, 21);
             tabuleiro.ToggleCell(21, 22);
-
             base.Initialize();
         }
 
@@ -57,10 +55,16 @@ namespace Conway_Game_of_Life
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            // Literalmente criando um pixel
             pixel = new Texture2D(GraphicsDevice, 1, 1);
             pixel.SetData(new[] { Color.White });
 
+            // Carregando fonte
+            fonte = Content.Load<SpriteFont>("Arial");
+
+            //DEBUG
+            debug = new DebugOverlay(fonte);
+            debug.Mouse = true;
         }
 
         protected override void Update(GameTime gameTime)
@@ -75,13 +79,63 @@ namespace Conway_Game_of_Life
             tecladoAnterior = tecladoAtual;
             tecladoAtual = Keyboard.GetState();
 
-            tabuleiro.AtivarCelula(mouseAtual, mouseAnterior, mouseAtual.Position);
+            tabuleiro.ActiveCell(mouseAtual, mouseAnterior, mouseAtual.Position);
             tabuleiro.deltaTime = gameTime.ElapsedGameTime.TotalSeconds;
-            tabuleiro.UpdateGrid();
 
+            debug.MousePosition = mouseAtual.Position;
+
+            //Atualiza as gerações em Grid.cs e armazena o índice atual da matriz
+            if (!tabuleiro.pausado)
+            {
+                generation = tabuleiro.UpdateGrid();
+            }
+
+            //Programando 'PAUSE'
             if (tecladoAtual.IsKeyDown(Keys.Space) && tecladoAnterior.IsKeyUp(Keys.Space))
             {
                 tabuleiro.pausado = !tabuleiro.pausado;
+
+                if (tabuleiro.pausado)
+                {
+                    indiceHistorico = generation;
+                }
+            }
+
+            //Programando botão para diminuir FPS
+            if (tecladoAtual.IsKeyDown(Keys.OemMinus) && tecladoAnterior.IsKeyUp(Keys.OemMinus))
+            {
+                tabuleiro.DownVel();
+                Console.WriteLine(tabuleiro.tempoTimer);
+            }
+
+            //Programando botão para aumentar FPS
+            if (tecladoAtual.IsKeyDown(Keys.OemPlus) && tecladoAnterior.IsKeyUp(Keys.OemPlus))
+            {
+                tabuleiro.UpVel();
+                Console.WriteLine(tabuleiro.tempoTimer);
+            }
+
+            if (tabuleiro.pausado)
+            {
+                //Programando controle de estados com setas do teclado
+                if (tecladoAtual.IsKeyDown(Keys.Left) && tecladoAnterior.IsKeyUp(Keys.Left))
+                {
+
+                    if (indiceHistorico > 0)
+                    {
+                        indiceHistorico--;
+                        tabuleiro.GetState(indiceHistorico);
+                    }
+                }
+
+                if (tecladoAtual.IsKeyDown(Keys.Right) && tecladoAnterior.IsKeyUp(Keys.Right))
+                {
+                    if (indiceHistorico < generation - 1)
+                    {
+                        indiceHistorico++;
+                        tabuleiro.GetState(indiceHistorico);
+                    }
+                }
             }
 
             base.Update(gameTime);
@@ -95,6 +149,10 @@ namespace Conway_Game_of_Life
             _spriteBatch.Begin();
 
             tabuleiro.DrawGrid(_spriteBatch, pixel);
+
+            _spriteBatch.DrawString(fonte, $"Tempo: {generation}", new Vector2(550, 50), Color.White);
+
+            debug.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
