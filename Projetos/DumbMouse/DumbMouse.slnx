@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../../Engine/SandboxEngine/SandboxEngine.csproj" />
+  <Project Path="DumbMouse.csproj" />
+</Solution>
