@@ -45,19 +45,21 @@ namespace DumbMouse
 
             if (direction == Direction.Down)
             {
+                if (posY < Matriz.GetLength(1) - 1)
+                {
+                    posY += 1;
+                }
+            }
+
+            if (direction == Direction.Up)
+            {
                 if (posY > 0)
                 {
                     posY -= 1;
                 }
             }
 
-            if (direction == Direction.Up)
-            {
-                if (posY < Matriz.GetLength(1) - 1)
-                {
-                    posY += 1;
-                }
-            }
+            //Console.WriteLine($"Horizontal Position: {posX}\nVertical Position: {posY}");
         }
 
         public void Draw(SpriteBatch spriteBatch, Texture2D textura)

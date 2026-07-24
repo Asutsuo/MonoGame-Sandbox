@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
+using System.Transactions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,8 +19,13 @@ public class Game1 : Game
     Texture2D tile;
     Grid board;
     Mouse mouse;
-    SE.Timer timer;
     MouseBrain brain;
+
+    bool training = true;
+    int indice;
+
+    int dx;
+    int dy;
 
     public Game1()
     {
@@ -39,8 +46,6 @@ public class Game1 : Game
         board = new Grid(30, 30);
 
         mouse = new Mouse(board.Matriz);
-
-        timer = new SE.Timer(.3);
 
         brain = new MouseBrain();
 
@@ -63,19 +68,27 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
-        timer.Atualizar(gameTime.ElapsedGameTime.TotalSeconds);
+        dx = board.cheeseX - mouse.posX;
+        dy = board.cheeseY - mouse.posY;
 
-
-        if (!timer.Ativo)
-        {
-            Mouse.Direction direction = brain.Think();
-            mouse.Update(direction);
-            timer.Resetar();
-        }
+        brain.dx = dx;
+        brain.dy = dy;
 
         board.mouseX = mouse.posX;
         board.mouseY = mouse.posY;
-        board.Update();
+
+        if (training)
+        {
+            brain.PlayMatch(mouse, board);
+            indice++;
+
+            if (indice == 500)
+            {
+                training = false;
+                Console.WriteLine($"Resultados:\n\nPeso direita X: {brain.rightWeightX}\nPeso direita Y: {brain.rightWeightY}\nPeso esquerda X: {brain.leftWeightX}\nPeso esquerda Y: {brain.leftWeightY}\nPeso cima X: {brain.upWeightX}\nPeso cima Y: {brain.upWeightY}\nPeso baixo X: {brain.downWeightX}\nPeso baixo Y: {brain.downWeightY}\n\nScore: {board.score}");
+                board.score = 0;
+            }
+        }
 
         base.Update(gameTime);
     }

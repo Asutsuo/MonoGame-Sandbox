@@ -9,17 +9,15 @@ namespace DumbMouse
     {
         public bool[,] Matriz;
         public int score;
+        public int mouseX;
+        public int mouseY;
+        public int cheeseX;
+        public int cheeseY;
 
         private Random random = new Random();
         private int width;
         private int height;
-        private bool cheese_exists = true;
-
-        public int mouseX;
-        public int mouseY;
-
-        int cheeseX = 1;
-        int cheeseY = 1;
+        private bool cheese_exists = false;
 
         public Grid(int width, int height)
         {
@@ -56,9 +54,9 @@ namespace DumbMouse
             {
                 cheese_exists = false;
                 score++;
-                Console.WriteLine($"Score: {score}");
             }
 
+            //Console.WriteLine($"Horizontal Position: {cheeseX}\nVertical Position: {cheeseY}");
         }
 
         public void Draw(SpriteBatch spriteBatch, Texture2D grid_texture, Texture2D cheese_texture)
