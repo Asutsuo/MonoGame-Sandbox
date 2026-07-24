@@ -18,6 +18,7 @@ public class Game1 : Game
     Grid board;
     Mouse mouse;
     SE.Timer timer;
+    MouseBrain brain;
 
     public Game1()
     {
@@ -41,6 +42,8 @@ public class Game1 : Game
 
         timer = new SE.Timer(.3);
 
+        brain = new MouseBrain();
+
         base.Initialize();
     }
 
@@ -62,9 +65,11 @@ public class Game1 : Game
         // TODO: Add your update logic here
         timer.Atualizar(gameTime.ElapsedGameTime.TotalSeconds);
 
+
         if (!timer.Ativo)
         {
-            mouse.Update(Mouse.Direction.Right);
+            Mouse.Direction direction = brain.Think();
+            mouse.Update(direction);
             timer.Resetar();
         }
 

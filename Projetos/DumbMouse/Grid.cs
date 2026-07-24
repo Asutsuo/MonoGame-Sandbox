@@ -18,8 +18,8 @@ namespace DumbMouse
         public int mouseX;
         public int mouseY;
 
-        int cheeseX = 29;
-        int cheeseY;
+        int cheeseX = 1;
+        int cheeseY = 1;
 
         public Grid(int width, int height)
         {
@@ -55,6 +55,8 @@ namespace DumbMouse
             if (cheeseX == mouseX && cheeseY == mouseY)
             {
                 cheese_exists = false;
+                score++;
+                Console.WriteLine($"Score: {score}");
             }
 
         }
