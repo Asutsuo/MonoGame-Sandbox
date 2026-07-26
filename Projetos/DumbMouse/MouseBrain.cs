@@ -13,6 +13,8 @@ namespace DumbMouse
         private Mouse.Direction bestDirection;
         private double bestScore;
 
+        public double[] weights = new double[8];
+
         public double rightWeightX;
         public double rightWeightY;
         public double leftWeightX;
@@ -37,6 +39,15 @@ namespace DumbMouse
             upWeightY = random.NextDouble() * 2 - 1;
             downWeightX = random.NextDouble() * 2 - 1;
             downWeightY = random.NextDouble() * 2 - 1;
+
+            weights[0] = rightWeightX;
+            weights[1] = rightWeightY;
+            weights[2] = leftWeightX;
+            weights[3] = leftWeightY;
+            weights[4] = upWeightX;
+            weights[5] = upWeightY;
+            weights[6] = downWeightX;
+            weights[7] = downWeightY;
         }
 
         public Mouse.Direction Think()
@@ -80,15 +91,6 @@ namespace DumbMouse
             //Console.WriteLine($"dx: {dx}\ndy: {dy}\n\nRight: {Right}\nLeft: {Left}\nUp: {Up}\nDown: {Down}\n\nEscolha: {bestDirection}");
 
             return bestDirection;
-        }
-
-        public void PlayMatch(Mouse mouse, Grid board)
-        {
-            board.Update();
-
-            Mouse.Direction direction = Think();
-
-            mouse.Update(direction);
         }
     }
 }

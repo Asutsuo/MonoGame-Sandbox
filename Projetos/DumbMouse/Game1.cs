@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Transactions;
 using Microsoft.Xna.Framework;
@@ -20,9 +21,7 @@ public class Game1 : Game
     Grid board;
     Mouse mouse;
     MouseBrain brain;
-
-    bool training = true;
-    int indice;
+    Trainer trainer;
 
     int dx;
     int dy;
@@ -48,6 +47,8 @@ public class Game1 : Game
         mouse = new Mouse(board.Matriz);
 
         brain = new MouseBrain();
+
+        trainer = new Trainer(10);
 
         base.Initialize();
     }
@@ -77,18 +78,7 @@ public class Game1 : Game
         board.mouseX = mouse.posX;
         board.mouseY = mouse.posY;
 
-        if (training)
-        {
-            brain.PlayMatch(mouse, board);
-            indice++;
-
-            if (indice == 500)
-            {
-                training = false;
-                Console.WriteLine($"Resultados:\n\nPeso direita X: {brain.rightWeightX}\nPeso direita Y: {brain.rightWeightY}\nPeso esquerda X: {brain.leftWeightX}\nPeso esquerda Y: {brain.leftWeightY}\nPeso cima X: {brain.upWeightX}\nPeso cima Y: {brain.upWeightY}\nPeso baixo X: {brain.downWeightX}\nPeso baixo Y: {brain.downWeightY}\n\nScore: {board.score}");
-                board.score = 0;
-            }
-        }
+        trainer.StartTraining(mouse, board);
 
         base.Update(gameTime);
     }
